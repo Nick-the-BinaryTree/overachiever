@@ -1,6 +1,6 @@
 import React from 'react'
-import { AppRegistry, ActivityIndicator, AsyncStorage, FlatList, ImageBackground,
-  Keyboard, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, AsyncStorage, AppRegistry, AppState, FlatList,
+  ImageBackground, Keyboard, StyleSheet, Text, View } from 'react-native'
 import Swiper from 'react-native-swiper'
 import DayHeader from './DayHeader.js'
 import Schedule from './Schedule.js'
@@ -28,8 +28,8 @@ export default class App extends React.Component {
     let hr = time.getHours()
     let night = (0 <= hr && hr <= 5) || (17 <= hr && hr <= 23)
 
-    this.state = {today : today, weekData: initData, curI: today, lastI: today, night: night,
-                  keyboardShowing: false}
+    this.state = {today : today, curI: today, lastI: today, night: night,
+                  keyboardShowing: false, appState: AppState.currentState}
 
     this.getSchedule = this.getSchedule.bind(this)
     this.setSchedule = this.setSchedule.bind(this)
@@ -38,14 +38,16 @@ export default class App extends React.Component {
     this.updateFromChild = this.updateFromChild.bind(this)
     this._keyboardDidShow = this._keyboardDidShow.bind(this)
     this._keyboardDidHide = this._keyboardDidHide.bind(this)
+    this._handleAppStateChange = this._handleAppStateChange.bind(this)
   }
   componentWillMount() {
     this.getSchedule()
+    AppState.addEventListener('change', this._handleAppStateChange)
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow)
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide)
   }
   componentWillUnmount() {
-    this.setSchedule()
+    AppState.removeEventListener('change', this._handleAppStateChange)
     this.keyboardDidShowListener.remove()
     this.keyboardDidHideListener.remove()
   }
@@ -55,13 +57,19 @@ export default class App extends React.Component {
   _keyboardDidHide() {
     this.setState({keyboardShowing: false})
   }
+  _handleAppStateChange(nextAppState) {
+    if (this.state.appState === 'active' && nextAppState === 'inactive' ||
+      nextAppState === 'background')
+      this.setSchedule()
+  }
   async getSchedule() {
     let res = {}
     try {
       let weekData = await AsyncStorage.getItem('weekData')
-
+      console.log(weekData)
       if (weekData !== 'false' && !!weekData) {
         res = JSON.parse(weekData)
+        console.log("successfully got above")
       } else {
         res = initData
       }
@@ -69,10 +77,13 @@ export default class App extends React.Component {
       res = initData
     } finally {
       this.setState({weekData: res})
+      console.log('set state')
     }
   }
   async setSchedule() {
     await AsyncStorage.setItem('weekData', JSON.stringify(this.state.weekData))
+    console.log('saving this data')
+    console.log(JSON.stringify(this.state.weekData))
   }
   stopEditing(i) {
     let res = this.state.weekData
