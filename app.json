@@ -14,12 +14,12 @@
       "resizeMode": "contain",
       "backgroundColor": "#455A64"
     },
-    "permissions": {},
     "ios": {
       "supportsTablet": true
     },
     "android": {
-      "package": "com.nicholashartunian.overachiever"
+      "package": "com.nicholashartunian.overachiever",
+      "permissions": []
     }
   }
 }
