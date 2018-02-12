@@ -66,10 +66,8 @@ export default class App extends React.Component {
     let res = {}
     try {
       let weekData = await AsyncStorage.getItem('weekData')
-      console.log(weekData)
       if (weekData !== 'false' && !!weekData) {
         res = JSON.parse(weekData)
-        console.log("successfully got above")
       } else {
         res = initData
       }
@@ -77,13 +75,10 @@ export default class App extends React.Component {
       res = initData
     } finally {
       this.setState({weekData: res})
-      console.log('set state')
     }
   }
   async setSchedule() {
     await AsyncStorage.setItem('weekData', JSON.stringify(this.state.weekData))
-    console.log('saving this data')
-    console.log(JSON.stringify(this.state.weekData))
   }
   stopEditing(i) {
     let res = this.state.weekData
