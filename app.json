@@ -19,7 +19,8 @@
     },
     "android": {
       "package": "com.nicholashartunian.overachiever",
-      "permissions": []
+      "permissions": [],
+      "versionCode": 2
     }
   }
 }
