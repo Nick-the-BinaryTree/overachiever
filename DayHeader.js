@@ -1,47 +1,32 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-const numToWord = { 1: "Monday", 2: "Tuesday", 3: "Wednesday",
-              4: "Thursday", 5: "Friday", 6: "Saturday", 7: "Sunday"}
+const numToWord = { 1: ["Monday", "Mon"], 2: ["Tuesday", "Tues"], 3: ["Wednesday", "Wed"],
+              4: ["Thursday", "Thurs"], 5: ["Friday", "Fri"], 6: ["Saturday", "Sat"],
+              7: ["Sunday", "Sun"]}
 
 export default class DayHeader extends React.Component {
   constructor(props) {
     super(props)
-    let introText = {}
-    let finalText = {}
+    let text = {}
 
-    for (let i=0; i <= 7; i++) {
-      let txt = ''
-
+    for (let i=1; i <= 7; i++) {
       if (i === props.today) {
-        txt = "Today is "
+        text[i] = "Today is " + numToWord[i][0]
       } else if (i === props.today+1 || (props.today === 7 && i === 1)) {
-        txt = "Tomorrow is "
+        text[i] = "Tomorrow is " + numToWord[i][1] + '.'
       } else if (i === props.today-1 || (props.today === 1 && i === 7)) {
-        txt = "Yesterday was "
-      }
-      introText[i] = txt
-    }
-
-    for (let i=0; i <= 7; i++) {
-      if (i === 3 && (introText[i] === "Yesterday was ")) {
-        finalText[i] = "Yesterday was Wed."
-      } else if (i === 4 && (introText[i] === "Yesterday was ")) {
-        finalText[i] = "Yesterday was Thurs."
-      } else if (i === 6 && (introText[i] === "Yesterday was ")) {
-        finalText[i] = "Yesterday was Sat."
-      }
-      else {
-        finalText[i] = introText[i] + numToWord[i]
+        text[i] = "Yesterday was " + numToWord[i][1] + '.'
+      } else {
+        text[i] = numToWord[i][0]
       }
     }
-
-    this.state = {finalText: finalText, currentSlide: props.currentSlide}
+    this.state = {text: text, currentSlide: props.currentSlide}
   }
   render() {
     return (
       <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>{this.state.finalText[this.state.currentSlide]}</Text>
+        <Text style={styles.headerText}>{this.state.text[this.state.currentSlide]}</Text>
       </View>
     )
   }
