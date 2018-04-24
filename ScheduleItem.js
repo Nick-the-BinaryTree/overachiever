@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 8,
     height: 80,
-    width: 325,
+    width: 335,
     padding: 10
   },
   timeInput: {
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   },
   amPicker: {
     height: 40,
-    width: 60,
+    width: 75,
     padding: 10,
   },
   bodyInput: {
