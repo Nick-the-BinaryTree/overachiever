@@ -76,8 +76,7 @@ const styles = StyleSheet.create({
   },
   amPicker: {
     height: 40,
-    width: 75,
-    padding: 10,
+    width: 90,
   },
   bodyInput: {
     height: 80,
